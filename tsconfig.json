@@ -5,14 +5,13 @@
         "noImplicitAny": true,
         "experimentalDecorators": true,
         "declaration": false,
-        "sourceMap": false,
-        "skipLibCheck": true,
+        "sourceMap": true,
         "rootDir": "./src",
         "outDir": "./bin"
     },
     "exclude": [
         "bin",
         "lib",
-        "node_modules"
+        "node_modules/gots/src"
     ]
 }

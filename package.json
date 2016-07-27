@@ -4,7 +4,7 @@
   "description": "Ts实验室",
   "scripts": {
     "bin": "tsc -p .",
-    "lib": "tsc -p . --declaration --sourceMap --outDir ./lib",
+    "lib": "tsc -p . --declaration --outDir ./lib",
     "sync": "git pull && npm update --save",
     "clean": "rm -rf bin/ lib/",
     "postinstall": "npm run lib"
