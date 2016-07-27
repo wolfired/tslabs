@@ -1,0 +1,25 @@
+{
+  "name": "tslabs",
+  "version": "0.0.1",
+  "description": "Ts实验室",
+  "scripts": {
+    "bin": "tsc -p .",
+    "lib": "tsc -p . --declaration --sourceMap --outDir ./lib",
+    "sync": "git pull && npm update --save",
+    "clean": "rm -rf bin/ lib/",
+    "postinstall": "npm run lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wolfired/tslabs.git"
+  },
+  "author": "LinkWu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wolfired/tslabs/issues"
+  },
+  "homepage": "https://github.com/wolfired/tslabs#readme",
+  "dependencies": {
+    "gots": "github:wolfired/gots#develop"
+  }
+}
