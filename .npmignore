@@ -2,5 +2,6 @@
 /bin/
 /lib/
 /node_modules/
+/typings/
 /.gitignore
 /.npmignore
