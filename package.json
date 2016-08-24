@@ -5,10 +5,10 @@
   "scripts": {
     "bin": "tsc -p .",
     "lib": "tsc -p . --declaration --outDir ./lib",
-    "sync": "git pull && npm update",
     "clean": "rm -rf bin/ lib/",
-    "types": "typings install",
-    "install": "npm run lib"
+    "deps": "rm -rf node_modules/ && npm install",
+    "types": "rm -rf typings/ && typings install",
+    "install": "npm run types && npm run lib"
   },
   "repository": {
     "type": "git",
