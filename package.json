@@ -8,7 +8,7 @@
     "sync": "git pull && npm update",
     "clean": "rm -rf bin/ lib/",
     "types": "typings install",
-    "preinstall": "npm run lib"
+    "postinstall": "npm run lib"
   },
   "repository": {
     "type": "git",
