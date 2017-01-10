@@ -1,13 +1,31 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "noImplicitAny": true,
-        "experimentalDecorators": true,
         "declaration": false,
-        "sourceMap": true,
+        "experimentalDecorators": true,
+        "inlineSourceMap": false,
+        "inlineSources": false,
+        // "mapRoot": "http://localhost/",//PATH or URL
+        "maxNodeModuleJsDepth": 1,
+        "module": "commonjs",
+        "noEmit": false,
+        "noEmitOnError": false,
+        "noFallthroughCasesInSwitch": false,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitUseStrict": false,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "outDir": "./bin",
+        // "outFile": "",
+        "preserveConstEnums": false,
+        "pretty": true,
+        "removeComments": false,
         "rootDir": "./src",
-        "outDir": "./bin"
+        "sourceMap": false,
+        // "sourceRoot": "http://localhost/",//PATH or URL
+        "strictNullChecks": true,
+        "target": "es6"
     },
     "exclude": [
         "bin",
