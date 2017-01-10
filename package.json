@@ -3,14 +3,14 @@
   "version": "0.0.1",
   "description": "Ts实验室",
   "scripts": {
-    "bin": "tsc -p . --outDir ./bin --preserveConstEnums --sourceMap",
-    "exp": "tsc -p . --outDir ./lib --declaration",
-    "lib": "tsc -p . --outDir ./lib --declaration --noEmitOnError --noFallthroughCasesInSwitch --noUnusedLocals --noUnusedParameters --removeComments",
+    "bin": "slt_exp src && tsc -p . --outDir ./bin --preserveConstEnums --sourceMap",
+    "exp": "slt_exp src && tsc -p . --outDir ./lib --declaration",
+    "lib": "slt_exp src && tsc -p . --outDir ./lib --declaration --noEmitOnError --noFallthroughCasesInSwitch --noUnusedLocals --noUnusedParameters --removeComments",
     "clean": "rm -rf bin/ lib/",
     "deps": "rm -rf node_modules/ && npm install",
     "types": "rm -rf typings/ && typings install",
     "test": "echo no test",
-    "prebuild": "npm run types && slt_exp src",
+    "prebuild": "npm run types",
     "build": "npm run lib 1>/dev/null 2>&1 || npm run exp",
     "postinstall": "npm run build"
   },
