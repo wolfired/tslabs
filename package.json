@@ -9,8 +9,9 @@
     "clean": "rm -rf bin/ lib/",
     "deps": "rm -rf node_modules/ && npm install",
     "types": "rm -rf typings/ && typings install",
+    "test": "echo no test",
     "prebuild": "npm run types && slt_exp src",
-    "build": "npm run lib 1> /dev/null 2>&1 || npm run exp",
+    "build": "npm run lib 1>/dev/null 2>&1 || npm run exp",
     "postinstall": "npm run build"
   },
   "repository": {
