@@ -3,16 +3,12 @@
   "version": "0.0.1",
   "description": "Ts实验室",
   "scripts": {
-    "bin": "slt_exp src && tsc -p . --outDir ./bin --preserveConstEnums --sourceMap",
-    "exp": "slt_exp src && tsc -p . --outDir ./lib --declaration",
-    "lib": "slt_exp src && tsc -p . --outDir ./lib --declaration --noEmitOnError --noFallthroughCasesInSwitch --noUnusedLocals --noUnusedParameters --removeComments",
-    "clean": "rm -rf bin/ lib/",
+    "debug": "tsc -p . --outDir ./debug --preserveConstEnums --sourceMap",
+    "release": "tsc -p . --outDir ./release --declaration --noEmitOnError --noFallthroughCasesInSwitch --noUnusedLocals --noUnusedParameters --removeComments",
+    "clean": "rm -rf debug/",
     "deps": "rm -rf node_modules/ && npm install",
     "types": "rm -rf typings/ && typings install",
-    "test": "echo no test",
-    "prebuild": "npm run types",
-    "build": "npm run lib 1>/dev/null 2>&1 || npm run exp",
-    "postinstall": "npm run build"
+    "test": "echo no test"
   },
   "repository": {
     "type": "git",
@@ -25,6 +21,5 @@
   },
   "homepage": "https://github.com/wolfired/tslabs#readme",
   "dependencies": {
-    "gots": "github:wolfired/gots#develop"
   }
 }

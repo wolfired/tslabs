@@ -1,5 +1,4 @@
 /.vscode/
-/bin/
-/lib/
+/debug/
 /node_modules/
 /typings/

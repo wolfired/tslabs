@@ -6,7 +6,7 @@
         "inlineSources": false,
         // "mapRoot": "http://localhost/",//PATH or URL
         "maxNodeModuleJsDepth": 1,
-        "module": "commonjs",
+        "module": "amd",
         "noEmit": false,
         "noEmitOnError": false,
         "noFallthroughCasesInSwitch": false,
@@ -16,7 +16,7 @@
         "noImplicitUseStrict": false,
         "noUnusedLocals": false,
         "noUnusedParameters": false,
-        "outDir": "./bin",
+        "outDir": "./debug",
         // "outFile": "",
         "preserveConstEnums": false,
         "pretty": true,
@@ -28,8 +28,7 @@
         "target": "es6"
     },
     "exclude": [
-        "bin",
-        "lib",
-        "node_modules/gots/src"
+        "debug",
+        "release"
     ]
 }
