@@ -1,0 +1,15 @@
+declare type bool = boolean;
+declare type int8 = number;
+declare type int16 = number;
+declare type int32 = number;
+declare type int64 = number;
+declare type int = int32;
+declare type rune = int32;
+declare type uint8 = number;
+declare type uint16 = number;
+declare type uint32 = number;
+declare type uint64 = number;
+declare type byte = uint8;
+declare type uint = uint32;
+declare type float32 = number;
+declare type float64 = number;
