@@ -10,6 +10,21 @@ export class Main extends signal.SignalRouter {
 
 }
 
+export class Forever {
+    private _id: uint;
+
+    public play(): void {
+        let forver = (elapse: uint) => {
+            this._id = window.requestAnimationFrame(forver);
+        };
+        forver(0);
+    }
+
+    public stop(): void {
+        window.cancelAnimationFrame(this._id);
+    }
+}
+
 export interface Args {
     canvas_w?: uint;
     canvas_h?: uint;
@@ -19,26 +34,6 @@ let args: Args = {
     canvas_w: 500,
     canvas_h: 500,
 };
-
-export class Forever {
-    private _id: uint;
-
-    public play(): void {
-        let forver = (elapse: uint) => {
-            this._id = window.requestAnimationFrame(forver);
-            console.log(elapse);
-        };
-        forver(0);
-    }
-
-    public stop(): void {
-        window.cancelAnimationFrame(this._id);
-    }
-
-    public next(): void {
-
-    }
-}
 
 export function main({ canvas_w = args.canvas_w!, canvas_h = args.canvas_h! }: Args = args): void {
     let can = document.createElement("canvas");
