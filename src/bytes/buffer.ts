@@ -1,3 +1,5 @@
+import * as utf8 from "../unicode/utf8";
+
 export class Buffer {
     private _bytes: Uint8Array;
     private _cursor: int = 0;
@@ -24,7 +26,7 @@ export class Buffer {
      * 增加指定容量
      */
     public grow(n: int): void {
-        let bytes = this._bytes;
+        const bytes = this._bytes;
 
         this._bytes = new Uint8Array(this.cap() + n);
 
@@ -32,7 +34,7 @@ export class Buffer {
     }
 
     /**
-     * 未读字节长度
+     * 未读字节数
      */
     public len(): int {
         return this._bytes.byteLength - this._cursor;
@@ -46,7 +48,7 @@ export class Buffer {
             n = this.len();
         }
 
-        let cursor = this._cursor;
+        const cursor = this._cursor;
 
         this._cursor += n;
 
@@ -57,7 +59,7 @@ export class Buffer {
      * 读取dst.byteLength字节，返回实际读取字节数，游标移动
      */
     public read(dst: Uint8Array): int {
-        let bytes = this.next(dst.byteLength);
+        const bytes = this.next(dst.byteLength);
 
         for (let i = 0; i < bytes.byteLength; ++i) {
             dst[i] = bytes[i];
@@ -81,9 +83,9 @@ export class Buffer {
      * 读取多个字节，游标移动
      */
     public readBytes(delim: byte): Uint8Array {
-        let bytes = this.bytes();
+        const bytes = this.bytes();
 
-        let n: int;
+        let n: int = 0;
         for (n = 0; n < bytes.byteLength; ++n) {
             if (delim === bytes[n]) {
                 ++n;
@@ -91,7 +93,7 @@ export class Buffer {
             }
         }
 
-        let dst = new Uint8Array(n);
+        const dst = new Uint8Array(n);
 
         this.read(dst);
 
@@ -105,8 +107,16 @@ export class Buffer {
 
     }
 
+    /**
+     * 读取一个UTF-8编码的Unicode codepoint
+     */
     public readRune(): [rune, int] {
-        return [0, 0];
+        const bytes = this.bytes();
+        const [codepoint, size] = utf8.DecodeRune(bytes);
+
+        this._cursor += size;
+
+        return [codepoint, size];
     }
 }
 
