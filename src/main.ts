@@ -37,6 +37,8 @@ let args: Args = {
 
 export function main({ canvas_w = args.canvas_w!, canvas_h = args.canvas_h! }: Args = args): void {
     let can = document.createElement("canvas");
+    can.style.width = Math.ceil(canvas_w / window.devicePixelRatio) + "px";
+    can.style.height = Math.ceil(canvas_h / window.devicePixelRatio) + "px";
     can.width = canvas_w;
     can.height = canvas_h;
 
