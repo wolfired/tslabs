@@ -10,7 +10,7 @@ const fss = `
     precision mediump float;
     
     void main(){
-        vec2 resolution = vec2(500.0, 500.0);
+        vec2 resolution = vec2(1440.0, 2560.0);
 
         vec2 center = resolution / 2.0;
         float radius = min(center.x, center.y);
@@ -32,17 +32,12 @@ const fss = `
 `;
 
 export enum ShaderType { VERTEX, FRAGMENT };
-export enum ClearType { COLOR = 0x1, DEPTH = 0x2, STENCIL = 0x4 };
 
 export class WebGL {
     public readonly ctx: WebGLRenderingContext;
 
     public constructor(ctx: WebGLRenderingContext) {
         this.ctx = ctx;
-    }
-
-    public clear(ct: ClearType): void {
-
     }
 
     public createShader(st: ShaderType, s: string): WebGLShader {
@@ -72,19 +67,17 @@ export class WebGL {
 
 
 export function setup(ctx: WebGLRenderingContext): void {
-    ctx.viewport(0, 0, 500, 500);
-    ctx.clearColor(0.6, 0.6, 0.6, 1.0);
+    ctx.viewport(0, 0, 1440, 2560);
+    ctx.clearColor(0.157, 0.173, 0.204, 1.0);
 
 
     ctx.clear(ctx.COLOR_BUFFER_BIT);
 
     const webgl = new WebGL(ctx);
-    let ct: ClearType = ClearType.COLOR | ClearType.DEPTH;
 
     const vs = webgl.createShader(ShaderType.VERTEX, vss);
     const fs = webgl.createShader(ShaderType.FRAGMENT, fss);
     const p = webgl.createProgram(vs, fs);
-
 
     const pdata = [
         -1, 1,
@@ -99,9 +92,7 @@ export function setup(ctx: WebGLRenderingContext): void {
     ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array(pdata), ctx.STATIC_DRAW);
 
     const l = ctx.getAttribLocation(p, "a_position");
-
     ctx.vertexAttribPointer(l, 2, ctx.FLOAT, false, 0, 0);
-
     ctx.enableVertexAttribArray(l);
 
     ctx.useProgram(p);
