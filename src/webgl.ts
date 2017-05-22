@@ -10,7 +10,7 @@ const fss = `
     precision mediump float;
     
     void main(){
-        vec2 resolution = vec2(1750.0, 1750.0);
+        vec2 resolution = vec2(1360.0, 1360.0);
 
         vec2 center = resolution / 2.0;
         float radius = min(center.x, center.y);
@@ -67,7 +67,7 @@ export class WebGL {
 
 
 export function setup(ctx: WebGLRenderingContext): void {
-    ctx.viewport(0, 0, 1750, 1750);
+    ctx.viewport(0, 0, 1360, 1360);
     ctx.clearColor(0.157, 0.173, 0.204, 1.0);
 
 
