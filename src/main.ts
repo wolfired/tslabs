@@ -31,23 +31,25 @@ export interface Args {
 }
 
 let args: Args = {
-    canvas_w: 500,
-    canvas_h: 500,
+    canvas_w: 400,
+    canvas_h: 400,
 };
 
 export function main({ canvas_w = args.canvas_w!, canvas_h = args.canvas_h! }: Args = args): void {
+    document.body.style.margin = "0px";
+
     let can = document.createElement("canvas");
-    can.style.width = canvas_w + "px";
-    can.style.height = canvas_h + "px";
-    can.width = canvas_w * window.devicePixelRatio;
-    can.height = canvas_h * window.devicePixelRatio;
+    document.body.appendChild(can);
+
+    can.style.width = "100%";
+    can.style.height = "100%";
+    can.width = Math.round(can.clientWidth * window.devicePixelRatio);
+    can.height = Math.round(can.clientHeight * window.devicePixelRatio);
 
     can.addEventListener("mousedown", (event: MouseEvent) => {
     });
 
-    document.body.appendChild(can);
-
-    webgl.setup(can.getContext("webgl")!);
+    webgl.setup(can);
 
     let f = new Forever();
     f.play();

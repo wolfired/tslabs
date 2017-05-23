@@ -8,11 +8,11 @@ const vss = `
 
 const fss = `
     precision mediump float;
+
+    uniform vec2 u_resolution;
     
     void main(){
-        vec2 resolution = vec2(1360.0, 1360.0);
-
-        vec2 center = resolution / 2.0;
+        vec2 center = u_resolution / 2.0;
         float radius = min(center.x, center.y);
 
         vec2 position = gl_FragCoord.xy - center;
@@ -66,10 +66,11 @@ export class WebGL {
 }
 
 
-export function setup(ctx: WebGLRenderingContext): void {
-    ctx.viewport(0, 0, 1360, 1360);
-    ctx.clearColor(0.157, 0.173, 0.204, 1.0);
+export function setup(can:HTMLCanvasElement): void {
+    const ctx: WebGLRenderingContext = can.getContext("webgl")!;
 
+    ctx.viewport(0, 0, can.width, can.height);
+    ctx.clearColor(0.157, 0.173, 0.204, 1.0);
 
     ctx.clear(ctx.COLOR_BUFFER_BIT);
 
@@ -94,11 +95,12 @@ export function setup(ctx: WebGLRenderingContext): void {
     const l = ctx.getAttribLocation(p, "a_position");
     ctx.vertexAttribPointer(l, 2, ctx.FLOAT, false, 0, 0);
     ctx.enableVertexAttribArray(l);
-
+    
     ctx.useProgram(p);
+
+    const u = ctx.getUniformLocation(p, "u_resolution");
+    ctx.uniform2f(u, can.width, can.height);
+
 
     ctx.drawArrays(ctx.TRIANGLES, 0, 6);
 }
-
-
-

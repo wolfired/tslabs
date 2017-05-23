@@ -1,5 +1,5 @@
 import { main } from "./main";
-main({canvas_w: 400, canvas_h: 400});
+main();
 
 
 import { simpleFetch } from "./fetcher";
