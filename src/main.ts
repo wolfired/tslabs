@@ -39,10 +39,9 @@ export function main({ canvas_w = args.canvas_w!, canvas_h = args.canvas_h! }: A
     document.body.style.margin = "0px";
 
     let can = document.createElement("canvas");
+    can.style.width = "100%";
+    can.style.height = "100%";
     document.body.appendChild(can);
-
-    can.style.width = window.innerWidth + "px";
-    can.style.height = window.innerHeight + "px";
 
     can.width = Math.round(can.clientWidth * window.devicePixelRatio);
     can.height = Math.round(can.clientHeight * window.devicePixelRatio);
