@@ -11,22 +11,20 @@ const fss = `
 
     uniform vec2 u_resolution;
     
+    //gl_FragCoord
+    //gl_FragColor
+    //discard
     void main(){
         vec2 center = u_resolution / 2.0;
-        float radius = min(center.x, center.y);
+        float r = min(center.x, center.y);
 
-        vec2 position = gl_FragCoord.xy - center;
+        vec2 pos = gl_FragCoord.xy - center;
 
-        float z = sqrt(radius * radius - position.x * position.x - position.y * position.y);
-        
-        // z /= radius;
-        vec3 normal = normalize(vec3(position.x, position.y, z));
-
-
-        if(length(position) > radius) {
-            discard;
+        // if(abs(pos.x) > r || abs(pos.y) > r){
+        if(length(pos) > r){    
+            gl_FragColor = vec4(1.0, 0.0, 0.0, 0.5);
         }else{
-            gl_FragColor = vec4((normal + 1.0)/2.0, 1.);
+            gl_FragColor = vec4(0.0, 1.0, 0.0, 0.5);
         }
     }
 `;
@@ -81,22 +79,22 @@ export function setup(can:HTMLCanvasElement): void {
     const p = webgl.createProgram(vs, fs);
 
     const pdata = [
-        -1, 1,
-        1, 1,
-        1, -1,
-        -1, 1,
-        1, -1,
-        -1, -1
+        -1.0, 1.0,
+        1.0, 1.0,
+        1.0, -1.0,
+        -1.0, 1.0,
+        1.0, -1.0,
+        -1.0, -1.0
     ];
     const pbuffer = ctx.createBuffer()!;
     ctx.bindBuffer(ctx.ARRAY_BUFFER, pbuffer);
     ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array(pdata), ctx.STATIC_DRAW);
 
+    ctx.useProgram(p);
+
     const l = ctx.getAttribLocation(p, "a_position");
     ctx.vertexAttribPointer(l, 2, ctx.FLOAT, false, 0, 0);
     ctx.enableVertexAttribArray(l);
-    
-    ctx.useProgram(p);
 
     const u = ctx.getUniformLocation(p, "u_resolution");
     ctx.uniform2f(u, can.width, can.height);
