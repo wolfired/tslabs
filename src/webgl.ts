@@ -1,104 +1,113 @@
+import * as m from "./math/matrix";
+import * as v from "./math/vector";
+
 const vss = `
     attribute vec4 a_position;
 
+    uniform mat4 u_m;
+
     void main(){
-        gl_Position = a_position;
+        gl_Position = a_position * u_m;
     }
 `;
 
 const fss = `
+    //mediump
+    //highp
     precision mediump float;
 
-    uniform vec2 u_resolution;
-    
     //gl_FragCoord
     //gl_FragColor
     //discard
     void main(){
-        vec2 center = u_resolution / 2.0;
-        float r = min(center.x, center.y);
-
-        vec2 pos = gl_FragCoord.xy - center;
-
-        // if(abs(pos.x) > r || abs(pos.y) > r){
-        if(length(pos) > r){    
-            gl_FragColor = vec4(1.0, 0.0, 0.0, 0.5);
-        }else{
-            gl_FragColor = vec4(0.0, 1.0, 0.0, 0.5);
-        }
+        gl_FragColor = vec4(0.0, 1.0, 0.0, 0.5);
     }
 `;
 
 export enum ShaderType { VERTEX, FRAGMENT };
 
-export class WebGL {
-    public readonly ctx: WebGLRenderingContext;
+let ctx: WebGLRenderingContext;
+let wid: float32;
+let hei: float32;
 
-    public constructor(ctx: WebGLRenderingContext) {
-        this.ctx = ctx;
-    }
-
-    public createShader(st: ShaderType, s: string): WebGLShader {
-        const shader = this.ctx.createShader(ShaderType.VERTEX === st ? this.ctx.VERTEX_SHADER : this.ctx.FRAGMENT_SHADER);
-        if (null === shader) {
-            throw "error";
-        }
-
-        this.ctx.shaderSource(shader, s);
-        this.ctx.compileShader(shader);
-
-        return shader;
-    }
-
-    public createProgram(vs: WebGLShader, fs: WebGLShader): WebGLProgram {
-        const program = this.ctx.createProgram();
-        if (null === program) {
-            throw "error";
-        }
-        this.ctx.attachShader(program, vs);
-        this.ctx.attachShader(program, fs);
-        this.ctx.linkProgram(program);
-
-        return program;
-    }
+export function setup(can: HTMLCanvasElement): void {
+    ctx = can.getContext("webgl")!;
+    ctx.clearColor(0.157, 0.173, 0.204, 1.0);
 }
 
+export function createShader(st: ShaderType, s: string): WebGLShader {
+    const shader = ctx.createShader(ShaderType.VERTEX === st ? ctx.VERTEX_SHADER : ctx.FRAGMENT_SHADER);
+    if (null === shader) {
+        throw "error";
+    }
 
-export function setup(can:HTMLCanvasElement): void {
-    const ctx: WebGLRenderingContext = can.getContext("webgl")!;
+    ctx.shaderSource(shader, s);
+    ctx.compileShader(shader);
 
-    ctx.viewport(0, 0, can.width, can.height);
-    ctx.clearColor(0.157, 0.173, 0.204, 1.0);
+    return shader;
+}
 
-    ctx.clear(ctx.COLOR_BUFFER_BIT);
+export function createProgram(vs: WebGLShader, fs: WebGLShader): WebGLProgram {
+    const program = ctx.createProgram();
+    if (null === program) {
+        throw "error";
+    }
+    ctx.attachShader(program, vs);
+    ctx.attachShader(program, fs);
+    ctx.linkProgram(program);
 
-    const webgl = new WebGL(ctx);
+    return program;
+}
 
-    const vs = webgl.createShader(ShaderType.VERTEX, vss);
-    const fs = webgl.createShader(ShaderType.FRAGMENT, fss);
-    const p = webgl.createProgram(vs, fs);
+export function resetViewport(w: float32, h: float32): void {
+    wid = w;
+    hei = h;
+    ctx.viewport(0, 0, wid, hei);
+}
 
-    const pdata = [
-        -1.0, 1.0,
-        1.0, 1.0,
-        1.0, -1.0,
-        -1.0, 1.0,
-        1.0, -1.0,
-        -1.0, -1.0
-    ];
-    const pbuffer = ctx.createBuffer()!;
-    ctx.bindBuffer(ctx.ARRAY_BUFFER, pbuffer);
-    ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array(pdata), ctx.STATIC_DRAW);
-
+export function beforeRender(): void {
+    const vs = createShader(ShaderType.VERTEX, vss);
+    const fs = createShader(ShaderType.FRAGMENT, fss);
+    const p = createProgram(vs, fs);
     ctx.useProgram(p);
 
+    const pos_data = [
+        -1.0, 1.0, 0.0, 1.0,
+        1.0, 1.0, 0.0, 1.0,
+        1.0, -1.0, 0.0, 1.0,
+        -1.0, 1.0, 0.0, 1.0,
+        1.0, -1.0, 0.0, 1.0,
+        -1.0, -1.0, 0.0, 1.0,
+    ];
+    const pos_raw = new Float32Array(pos_data);
+    const pos_buff = ctx.createBuffer()!;
+    ctx.bindBuffer(ctx.ARRAY_BUFFER, pos_buff);
+    ctx.bufferData(ctx.ARRAY_BUFFER, pos_raw, ctx.STATIC_DRAW);
+
     const l = ctx.getAttribLocation(p, "a_position");
-    ctx.vertexAttribPointer(l, 2, ctx.FLOAT, false, 0, 0);
+    ctx.vertexAttribPointer(l, 4, ctx.FLOAT, false, 0, 0);
     ctx.enableVertexAttribArray(l);
 
-    const u = ctx.getUniformLocation(p, "u_resolution");
-    ctx.uniform2f(u, can.width, can.height);
+    const s_m: m.Matrix = m.MakeScale();
+    const r_m: m.Matrix = m.MakeRotate(0, 2);
+    const t_m: m.Matrix = m.MakeTranslate(0, 0, 8);
+    const v_m: m.Matrix = m.MakeUVN(v.Make(0, 0, 0, 1), v.Make(0, 0, 1, 1), v.Make(0, 1, 0, 0));
+    const p_m: m.Matrix = m.MakeProjection(90.0, wid / hei, 0.1, 1000);
 
+    const pos_m: m.Matrix = m.MakeZero();
+    m.Clone(pos_m.raw, pos_raw);
+    m.Format(pos_m.multiplies(s_m, r_m, t_m, v_m, p_m));
+
+    const u = ctx.getUniformLocation(p, "u_m")!;
+    ctx.uniformMatrix4fv(u, false, m.MakeIdentity().multiplies(s_m, r_m, t_m, v_m, p_m).raw);
+
+
+}
+
+export function render(): void {
+    ctx.clear(ctx.COLOR_BUFFER_BIT);
 
     ctx.drawArrays(ctx.TRIANGLES, 0, 6);
 }
+
+

@@ -14,8 +14,15 @@ export class Forever {
     private _id: uint;
 
     public play(): void {
+        let mark: uint = 0;
         let forver = (elapse: uint) => {
             this._id = window.requestAnimationFrame(forver);
+            if (16 < elapse - mark) {
+                webgl.render();
+
+                mark = elapse;
+            }
+            
         };
         forver(0);
     }
@@ -39,19 +46,28 @@ export function main({ canvas_w = args.canvas_w!, canvas_h = args.canvas_h! }: A
     document.body.style.margin = "0px";
 
     let can = document.createElement("canvas");
-    can.style.width = "100vw";
-    can.style.height = "100vh";
+    can.style.width = "300px";
+    can.style.height = "300px";
     can.style.display = "block";
-    document.body.appendChild(can);
-
-    can.width = Math.round(can.clientWidth * window.devicePixelRatio);
-    can.height = Math.round(can.clientHeight * window.devicePixelRatio);
-
     can.addEventListener("mousedown", (event: MouseEvent) => {
     });
+    document.body.appendChild(can);
 
     webgl.setup(can);
 
+    window.addEventListener("resize", (event: UIEvent) => {
+        can.width = Math.round(can.clientWidth * window.devicePixelRatio);
+        can.height = Math.round(can.clientHeight * window.devicePixelRatio);
+        webgl.resetViewport(can.width, can.height);
+    });
+
+    can.width = Math.round(can.clientWidth * window.devicePixelRatio);
+    can.height = Math.round(can.clientHeight * window.devicePixelRatio);
+    webgl.resetViewport(can.width, can.height);
+
+    webgl.beforeRender();
+    webgl.render();
+
     let f = new Forever();
-    f.play();
+    // f.play();
 }
