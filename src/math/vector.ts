@@ -6,48 +6,72 @@ export function Clone(dst: Float32Array, src: Float32Array): void {
     dst[0x0] = src[0x0], dst[0x1] = src[0x1], dst[0x2] = src[0x2], dst[0x3] = src[0x3];
 }
 
-export function Normalize(t: Vector, r: Vector = new Vector()): Vector {
-    const len: float32 = t.length;
-    [r.raw[0], r.raw[1], r.raw[2]] = [
-        t.raw[0] /= len,
-        t.raw[1] /= len,
-        t.raw[2] /= len,
+export function LengthRaw(t: Float32Array): float32 {
+    return Math.sqrt(t[0] * t[0] + t[1] * t[1] + t[2] * t[2]);
+}
+
+export function NormalizeRaw(t: Float32Array, r: Float32Array): void {
+    const len: float32 = LengthRaw(t);
+    [r[0], r[1], r[2]] = [
+        t[0] /= len,
+        t[1] /= len,
+        t[2] /= len,
     ];
+}
+
+export function Normalize(t: Vector, r: Vector = new Vector()): Vector {
+    NormalizeRaw(t.raw, r.raw);
     return r;
+}
+
+export function AdditionRaw(lh: Float32Array, rh: Float32Array, r: Float32Array): void {
+    [r[0], r[1], r[2]] = [
+        lh[0] + rh[0],
+        lh[1] + rh[1],
+        lh[2] + rh[2],
+    ];
 }
 
 export function Addition(lh: Vector, rh: Vector, r: Vector = new Vector()): Vector {
-    [r.raw[0], r.raw[1], r.raw[2]] = [
-        lh.raw[0] + rh.raw[0],
-        lh.raw[1] + rh.raw[1],
-        lh.raw[2] + rh.raw[2],
-    ];
+    AdditionRaw(lh.raw, rh.raw, r.raw);
     return r;
 }
 
-export function Subtraction(lh: Vector, rh: Vector, r: Vector = new Vector()): Vector {
-    [r.raw[0], r.raw[1], r.raw[2]] = [
-        lh.raw[0] - rh.raw[0],
-        lh.raw[1] - rh.raw[1],
-        lh.raw[2] - rh.raw[2],
+export function SubtractionRaw(lh: Float32Array, rh: Float32Array, r: Float32Array): void {
+    [r[0], r[1], r[2]] = [
+        lh[0] - rh[0],
+        lh[1] - rh[1],
+        lh[2] - rh[2],
     ];
+}
+
+export function Subtraction(lh: Vector, rh: Vector, r: Vector = new Vector()): Vector {
+    SubtractionRaw(lh.raw, rh.raw, r.raw);
+    return r;
+}
+
+export function DotProductRaw(lh: Float32Array, rh: Float32Array): float32 {
+    let r: float32 = 0.0;
+    r += lh[0] * rh[0];
+    r += lh[1] * rh[1];
+    r += lh[2] * rh[2];
     return r;
 }
 
 export function DotProduct(lh: Vector, rh: Vector): float32 {
-    let r: float32 = 0.0;
-    r += lh.raw[0] * rh.raw[0];
-    r += lh.raw[1] * rh.raw[1];
-    r += lh.raw[2] * rh.raw[2];
-    return r;
+    return DotProductRaw(lh.raw, rh.raw);
+}
+
+export function CrossProductRaw(lh: Float32Array, rh: Float32Array, r: Float32Array): void {
+    [r[0], r[1], r[2]] = [
+        lh[1] * rh[2] - lh[2] * rh[1],
+        lh[2] * rh[0] - lh[0] * rh[2],
+        lh[0] * rh[1] - lh[1] * rh[0],
+    ];
 }
 
 export function CrossProduct(lh: Vector, rh: Vector, r: Vector = new Vector()): Vector {
-    [r.raw[0], r.raw[1], r.raw[2]] = [
-        lh.raw[1] * rh.raw[2] - lh.raw[2] * rh.raw[1],
-        lh.raw[2] * rh.raw[0] - lh.raw[0] * rh.raw[2],
-        lh.raw[0] * rh.raw[1] - lh.raw[1] * rh.raw[0],
-    ];
+    CrossProductRaw(lh.raw, rh.raw, r.raw);
     return r;
 }
 /**
@@ -55,11 +79,7 @@ export function CrossProduct(lh: Vector, rh: Vector, r: Vector = new Vector()): 
  */
 export class Vector {
     public constructor(x: float32 = 0.0, y: float32 = 0.0, z: float32 = 0.0, w: float32 = 0.0) {
-        this.raw = new Float32Array(4);
-        this.raw[0] = x;
-        this.raw[1] = y;
-        this.raw[2] = z;
-        this.raw[3] = w;
+        this.raw = new Float32Array([x, y, z, w]);
     }
 
     public normalize(): Vector {
@@ -83,7 +103,7 @@ export class Vector {
     }
 
     public get length(): float32 {
-        return Math.sqrt(this.raw[0] * this.raw[0] + this.raw[1] * this.raw[1] + this.raw[2] * this.raw[2]);
+        return LengthRaw(this.raw);
     }
 
     public readonly raw: Float32Array = null!;
