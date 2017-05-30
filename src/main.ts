@@ -18,7 +18,7 @@ export class Forever {
         let forver = (elapse: uint) => {
             this._id = window.requestAnimationFrame(forver);
             if (16 < elapse - mark) {
-                webgl.render();
+                webgl.render(elapse);
 
                 mark = elapse;
             }
@@ -66,8 +66,8 @@ export function main({ canvas_w = args.canvas_w!, canvas_h = args.canvas_h! }: A
     webgl.resetViewport(can.width, can.height);
 
     webgl.beforeRender();
-    webgl.render();
+    // webgl.render();
 
     let f = new Forever();
-    // f.play();
+    f.play();
 }

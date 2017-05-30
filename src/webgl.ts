@@ -64,20 +64,27 @@ export function resetViewport(w: float32, h: float32): void {
     hei = h;
     ctx.viewport(0, 0, wid, hei);
 }
-
+let p:WebGLProgram;
 export function beforeRender(): void {
     const vs = createShader(ShaderType.VERTEX, vss);
     const fs = createShader(ShaderType.FRAGMENT, fss);
-    const p = createProgram(vs, fs);
+    p = createProgram(vs, fs);
     ctx.useProgram(p);
 
     const pos_data = [
-        -1.0, 1.0, 0.0, 1.0,
-        1.0, 1.0, 0.0, 1.0,
-        1.0, -1.0, 0.0, 1.0,
-        -1.0, 1.0, 0.0, 1.0,
-        1.0, -1.0, 0.0, 1.0,
-        -1.0, -1.0, 0.0, 1.0,
+        -0.5, 0.5, 0.0, 1.0,
+        0.5, 0.5, 0.0, 1.0,
+        0.5, -0.5, 0.0, 1.0,
+        -0.5, 0.5, 0.0, 1.0,
+        0.5, -0.5, 0.0, 1.0,
+        -0.5, -0.5, 0.0, 1.0,
+
+        -0.5, 0.5, 1.0, 1.0,
+        0.5, 0.5, 1.0, 1.0,
+        0.5, -0.5, 1.0, 1.0,
+        -0.5, 0.5, 1.0, 1.0,
+        0.5, -0.5, 1.0, 1.0,
+        -0.5, -0.5, 1.0, 1.0,
     ];
     const pos_raw = new Float32Array(pos_data);
     const pos_buff = ctx.createBuffer()!;
@@ -89,25 +96,28 @@ export function beforeRender(): void {
     ctx.enableVertexAttribArray(l);
 
     const s_m: m.Matrix = m.MakeScale();
-    const r_m: m.Matrix = m.MakeRotate(0, 2);
-    const t_m: m.Matrix = m.MakeTranslate(0, 0, 8);
+    const r_m: m.Matrix = m.MakeRotate(70, 1);
+    const t_m: m.Matrix = m.MakeTranslate(0, 0, 1);
     const v_m: m.Matrix = m.MakeUVN(v.Make(0, 0, 0, 1), v.Make(0, 0, 1, 1), v.Make(0, 1, 0, 0));
     const p_m: m.Matrix = m.MakeProjection(90.0, wid / hei, 0.1, 1000);
 
-    const pos_m: m.Matrix = m.MakeZero();
-    m.Clone(pos_m.raw, pos_raw);
-    m.Format(pos_m.multiplies(s_m, r_m, t_m, v_m, p_m));
-
     const u = ctx.getUniformLocation(p, "u_m")!;
-    ctx.uniformMatrix4fv(u, false, m.MakeIdentity().multiplies(s_m, r_m, t_m, v_m, p_m).raw);
-
-
+    ctx.uniformMatrix4fv(u, false, m.MakeIdentity().multiplies(s_m, r_m, t_m, v_m, p_m).transpose().raw);
 }
 
-export function render(): void {
+export function render(elapse:uint): void {
     ctx.clear(ctx.COLOR_BUFFER_BIT);
 
-    ctx.drawArrays(ctx.TRIANGLES, 0, 6);
+    const s_m: m.Matrix = m.MakeScale();
+    const r_m: m.Matrix = m.MakeRotate(elapse / 30, 1);
+    const t_m: m.Matrix = m.MakeTranslate(0, 0, 1);
+    const v_m: m.Matrix = m.MakeUVN(v.Make(0, 0, 0, 1), v.Make(0, 0, 1, 1), v.Make(0, 1, 0, 0));
+    const p_m: m.Matrix = m.MakeProjection(90.0, wid / hei, 0.1, 1000);
+
+    const u = ctx.getUniformLocation(p, "u_m")!;
+    ctx.uniformMatrix4fv(u, false, m.MakeIdentity().multiplies(s_m, r_m, t_m, v_m, p_m).transpose().raw);
+
+    ctx.drawArrays(ctx.TRIANGLES, 0, 12);
 }
 
 
