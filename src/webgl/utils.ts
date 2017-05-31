@@ -35,9 +35,6 @@ export function MakeRotate(deg: float32 = 0, axis: math.AXIS = math.AXIS.X): mat
             r.raw[0x4] = -Math.sin(rad), r.raw[0x5] = Math.cos(rad);
             break;
         }
-        default: {
-            throw "error";
-        }
     }
     return r;
 }

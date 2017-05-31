@@ -77,18 +77,6 @@ export function Multiply(lh: Matrix, rh: Matrix, r: Matrix = new Matrix()): Matr
     return r;
 }
 
-export function Translate(tx: float32 = 0.0, ty: float32 = 0.0, tz: float32 = 0.0): void {
-    // this.multiply(AWMathUtil.makeTranslateMatrix(tx, ty, tz));
-}
-
-export function Scale(sx: float32 = 1.0, sy: float32 = 1.0, sz: float32 = 1.0): void {
-    // this.multiply(AWMathUtil.makeScaleMatrix(sx, sy, sz));
-}
-
-export function Rotate(deg: float32 = 0.0, axis: AXIS = AXIS.X): void {
-    // this.multiply(AWMathUtil.makeRotateMatrix(deg, axis));
-}
-
 /**
  * 矩阵
  */

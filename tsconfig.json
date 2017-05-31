@@ -25,7 +25,7 @@
         "sourceMap": false,
         // "sourceRoot": "http://localhost/",//PATH or URL
         "strictNullChecks": true,
-        "target": "es6"
+        "target": "es2015"
     },
     "exclude": [
         "debug",

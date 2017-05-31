@@ -34,7 +34,7 @@ export class Entity implements IEntity {
         if (void 0 === com) {
             return null;
         }
-        return <T>com;
+        return com as T;
     }
 
     public Get<T extends Component>(cc: ComponentConstructor<T> & ComponentType): T {
@@ -47,6 +47,6 @@ export class Entity implements IEntity {
         if (void 0 === com) {
             this._component_map[cc.IDX] = com = new cc(this);
         }
-        return <T>com;
+        return com as T;
     }
 }
