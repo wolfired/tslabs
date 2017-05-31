@@ -1,5 +1,6 @@
-import * as m from "./math/matrix";
-import * as v from "./math/vector";
+import * as matrix from "./math/matrix";
+import * as vector from "./math/vector";
+import * as utils from "./webgl/utils";
 
 const vss = `
     attribute vec4 a_position;
@@ -87,6 +88,7 @@ export function beforeRender(): void {
         -0.5, -0.5, 1.0, 1.0,
     ];
     const pos_raw = new Float32Array(pos_data);
+    
     const pos_buff = ctx.createBuffer()!;
     ctx.bindBuffer(ctx.ARRAY_BUFFER, pos_buff);
     ctx.bufferData(ctx.ARRAY_BUFFER, pos_raw, ctx.STATIC_DRAW);
@@ -94,30 +96,19 @@ export function beforeRender(): void {
     const l = ctx.getAttribLocation(p, "a_position");
     ctx.vertexAttribPointer(l, 4, ctx.FLOAT, false, 0, 0);
     ctx.enableVertexAttribArray(l);
-
-    const s_m: m.Matrix = m.MakeScale();
-    const r_m: m.Matrix = m.MakeRotate(70, 1);
-    const t_m: m.Matrix = m.MakeTranslate(0, 0, 1);
-    const v_m: m.Matrix = m.MakeUVN(v.Make(0, 0, 0, 1), v.Make(0, 0, 1, 1), v.Make(0, 1, 0, 0));
-    const p_m: m.Matrix = m.MakeProjection(90.0, wid / hei, 0.1, 1000);
-
-    const u = ctx.getUniformLocation(p, "u_m")!;
-    ctx.uniformMatrix4fv(u, false, m.MakeIdentity().multiplies(s_m, r_m, t_m, v_m, p_m).transpose().raw);
 }
 
 export function render(elapse:uint): void {
     ctx.clear(ctx.COLOR_BUFFER_BIT);
 
-    const s_m: m.Matrix = m.MakeScale();
-    const r_m: m.Matrix = m.MakeRotate(elapse / 30, 1);
-    const t_m: m.Matrix = m.MakeTranslate(0, 0, 1);
-    const v_m: m.Matrix = m.MakeUVN(v.Make(0, 0, 0, 1), v.Make(0, 0, 1, 1), v.Make(0, 1, 0, 0));
-    const p_m: m.Matrix = m.MakeProjection(90.0, wid / hei, 0.1, 1000);
+    const s_m: matrix.Matrix = utils.MakeScale();
+    const r_m: matrix.Matrix = utils.MakeRotate(elapse / 30, 1);
+    const t_m: matrix.Matrix = utils.MakeTranslate(0, 0, 1);
+    const v_m: matrix.Matrix = utils.MakeUVN(vector.Make(0, 0, 0, 1), vector.Make(0, 0, 1, 1), vector.Make(0, 1, 0, 0));
+    const p_m: matrix.Matrix = utils.MakeProjection(90.0, wid / hei, 0.1, 1000);
 
     const u = ctx.getUniformLocation(p, "u_m")!;
-    ctx.uniformMatrix4fv(u, false, m.MakeIdentity().multiplies(s_m, r_m, t_m, v_m, p_m).transpose().raw);
+    ctx.uniformMatrix4fv(u, false, matrix.MakeIdentity().multiplies(s_m, r_m, t_m, v_m, p_m).transpose().raw);
 
     ctx.drawArrays(ctx.TRIANGLES, 0, 12);
 }
-
-

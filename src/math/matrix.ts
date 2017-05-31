@@ -1,5 +1,4 @@
-import { DEG_2_RAD, AXIS } from "../math";
-import { Vector, Subtraction as v_Subtraction, CrossProduct as v_CrossProduct, Clone as v_Clone } from "./vector";
+import { AXIS } from "../math";
 
 export function MakeZero(): Matrix {
     return new Matrix();
@@ -75,89 +74,6 @@ export function MultiplyRaw(lh: Float32Array, rh: Float32Array, r: Float32Array)
 
 export function Multiply(lh: Matrix, rh: Matrix, r: Matrix = new Matrix()): Matrix {
     MultiplyRaw(lh.raw, rh.raw, r.raw);
-    return r;
-}
-
-export function MakeTranslate(tx: float32 = 0.0, ty: float32 = 0.0, tz: float32 = 0.0): Matrix {
-    const r: Matrix = MakeIdentity();
-    r.raw[0xC] = tx, r.raw[0xD] = ty, r.raw[0xE] = tz;
-    return r;
-}
-
-export function MakeScale(sx: float32 = 1.0, sy: float32 = 1.0, sz: float32 = 1.0): Matrix {
-    const r: Matrix = MakeIdentity();
-    r.raw[0x0] = sx, r.raw[0x5] = sy, r.raw[0xA] = sz;
-    return r;
-}
-
-export function MakeRotate(deg: float32 = 0, axis: AXIS = AXIS.X): Matrix {
-    const r: Matrix = MakeIdentity();
-
-    const rad: float32 = deg * DEG_2_RAD;
-
-    switch (axis) {
-        case AXIS.X: {
-            r.raw[0x5] = +Math.cos(rad), r.raw[0x6] = Math.sin(rad);
-            r.raw[0x9] = -Math.sin(rad), r.raw[0xA] = Math.cos(rad);
-            break;
-        }
-        case AXIS.Y: {
-            r.raw[0x0] = Math.cos(rad), r.raw[0x2] = -Math.sin(rad);
-            r.raw[0x8] = Math.sin(rad), r.raw[0xA] = +Math.cos(rad);
-            break;
-        }
-        case AXIS.Z: {
-            r.raw[0x0] = +Math.cos(rad), r.raw[0x1] = Math.sin(rad);
-            r.raw[0x4] = -Math.sin(rad), r.raw[0x5] = Math.cos(rad);
-            break;
-        }
-        default: {
-            throw "error";
-        }
-    }
-    return r;
-}
-
-export function MakeUVN(at: Vector, to: Vector, up: Vector): Matrix {
-    const n: Vector = v_Subtraction(to, at).normalize();;//前向量
-    const u: Vector = v_CrossProduct(up, n).normalize();;//右向量
-    const v: Vector = v_CrossProduct(n, u);//上向量
-
-    const t: Vector = new Vector(-at.dotProduct(u), -at.dotProduct(v), -at.dotProduct(n), 1.0);
-
-    const r: Matrix = MakeIdentity();
-    r.copyColumnFrom(0, u.raw);
-    r.copyColumnFrom(1, v.raw);
-    r.copyColumnFrom(2, n.raw);
-    r.copyRowFrom(3, t.raw);
-
-    return r;
-}
-
-export function MakeProjection(fovx_deg: float32, aspectRatio: float32, near: float32, far: float32): Matrix {
-    var zoom_y: float32 = 1.0 / Math.tan(fovx_deg * DEG_2_RAD / 2.0);
-    var zoom_x: float32 = aspectRatio * zoom_y;
-
-    var r: Matrix = MakeIdentity();
-
-    r.raw[0x0] = zoom_x;
-    r.raw[0x5] = zoom_y;
-    r.raw[0xA] = - (far + near) / (far - near), r.raw[0xB] = 1.0;
-    r.raw[0xE] = 2 * far * near / (far - near), r.raw[0xF] = 0.0;
-
-    return r;
-}
-
-export function MakeScreen(view_port_width: float32, view_port_original_width: float32, view_port_height: float32, view_port_original_height: float32, aspectRatio: float32): Matrix {
-    var half_width: float32 = (view_port_width - 1) / 2;
-    var half_height: float32 = (view_port_height - 1) / 2;
-
-    var r: Matrix = MakeIdentity();
-
-    r.raw[0x0] = half_width * view_port_original_width / view_port_width;
-    r.raw[0x5] = -half_height * view_port_original_height / (view_port_height * aspectRatio);
-    r.raw[0xE] = half_width, r.raw[0xF] = half_height;
-
     return r;
 }
 

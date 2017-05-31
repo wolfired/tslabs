@@ -1,7 +1,6 @@
 import { main } from "./main";
 main();
 
-
 import { simpleFetch } from "./fetcher";
 import { Obj } from "./parse/obj";
 

@@ -46,8 +46,8 @@ export function main({ canvas_w = args.canvas_w!, canvas_h = args.canvas_h! }: A
     document.body.style.margin = "0px";
 
     let can = document.createElement("canvas");
-    can.style.width = "300px";
-    can.style.height = "300px";
+    can.style.width = "100vw";
+    can.style.height = "100vh";
     can.style.display = "block";
     can.addEventListener("mousedown", (event: MouseEvent) => {
     });
