@@ -99,10 +99,10 @@ export function BeforeRender(): void {
 export function Render(): void {
     ctx.clear(ctx.COLOR_BUFFER_BIT);
 
-    const s_m: matrix.Matrix = utils.MakeScale();
+    const s_m: matrix.Matrix = utils.MakeScale(2, 2, 2);
     const r_m: matrix.Matrix = utils.MakeRotate(Envs.elapse / 30, 1);
     const t_m: matrix.Matrix = utils.MakeTranslate(0, 0, 1);
-    const v_m: matrix.Matrix = utils.MakeUVN(vector.Make(0, 0, 0, 1), vector.Make(0, 0, 1, 1), vector.Make(0, 1, 0, 0));
+    const v_m: matrix.Matrix = utils.MakeUVN(vector.Make(0, 4, -2, 1), vector.Make(0, 0, 0, 1), vector.Make(0, 1, 0, 0));
     const p_m: matrix.Matrix = utils.MakeProjection(90.0, Envs.can.width / Envs.can.height, 0.1, 1000);
 
     const u = ctx.getUniformLocation(p, "u_m")!;

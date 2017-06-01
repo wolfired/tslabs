@@ -1,5 +1,7 @@
 import { IEntity } from "./entity";
 
+enum Status { INIT };
+
 /**
  * 组件基类
  */
@@ -12,7 +14,17 @@ export abstract class Component {
         this.host = host;
     }
 
-    protected abstract update(): void;
+    public action(): void {
+        console.log(this);
+    }
+
+    protected init(): void {
+
+    }
+
+    protected update(): void {
+
+    }
 }
 
 export type ComponentType = typeof Component;
