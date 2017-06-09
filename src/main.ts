@@ -1,4 +1,5 @@
 import * as html from "./html";
+import * as sock from "./sock";
 import * as webgl from "./webgl";
 import { Entity } from "./entity";
 import { Transform } from "./component/transform";
@@ -8,11 +9,13 @@ import { Camera } from "./component/camera";
 export const Args = {
     canvas_w: "100vw",
     canvas_h: "100vh",
+    server: "ws://localhost",
 };
 
 export const Envs = {
     can: null! as HTMLCanvasElement,
     ctx: null! as WebGLRenderingContext,
+    sock: null! as WebSocket,
     elapse: 0 as uint,
     entities: null! as Entity[],
 }
@@ -20,6 +23,7 @@ export const Envs = {
 export function Main(): void {
     html.Setup();
     webgl.Setup();
+    sock.Setup();
 
     Envs.entities = [];
 
