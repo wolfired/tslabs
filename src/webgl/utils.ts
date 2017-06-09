@@ -40,11 +40,11 @@ export function MakeRotate(deg: float32 = 0, axis: math.AXIS = math.AXIS.X): mat
 }
 
 export function MakeUVN(at: vector.Vector, to: vector.Vector, up: vector.Vector): matrix.Matrix {
-    const n: vector.Vector = vector.Subtraction(to, at).normalize();;//前向量
-    const u: vector.Vector = vector.CrossProduct(up, n).normalize();;//右向量
+    const n: vector.Vector = vector.Subtraction(to, at).normalize();//前向量
+    const u: vector.Vector = vector.CrossProduct(up, n).normalize();//右向量
     const v: vector.Vector = vector.CrossProduct(n, u);//上向量
 
-    const t: vector.Vector = new vector.Vector(-at.dotProduct(u), -at.dotProduct(v), -at.dotProduct(n), 1.0);
+    const t: vector.Vector = vector.Make(-at.dotProduct(u), -at.dotProduct(v), -at.dotProduct(n), 1.0);
 
     const r: matrix.Matrix = matrix.MakeIdentity();
     r.copyColumnFrom(0, u.raw);

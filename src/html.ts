@@ -23,7 +23,7 @@ export function Setup(): void {
     can.width = Math.round(can.clientWidth * window.devicePixelRatio);
     can.height = Math.round(can.clientHeight * window.devicePixelRatio);
     can.addEventListener("mousedown", (event: MouseEvent) => {
-
+        
     });
 
     window.addEventListener("resize", (event: UIEvent) => {

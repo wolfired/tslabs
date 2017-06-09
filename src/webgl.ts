@@ -69,7 +69,6 @@ export function BeforeRender(): void {
     const vs = MakeShader(ctx.VERTEX_SHADER, vss);
     const fs = MakeShader(ctx.FRAGMENT_SHADER, fss);
     p = MakeProgram(vs, fs);
-    ctx.useProgram(p);
 
     const pos_raw = new Float32Array([
         -0.5, 0.5, 0.0,
@@ -87,6 +86,13 @@ export function BeforeRender(): void {
         -0.5, -0.5, 1.0,
     ]);
 
+    let an = ctx.getProgramParameter(p, ctx.ACTIVE_ATTRIBUTES);
+    for(let i:int = 0; i < an; ++i){
+        let c = ctx.getActiveAttrib(p, i)!;
+        console.log(c);
+        
+    }
+
     const pos_buff = ctx.createBuffer()!;
     ctx.bindBuffer(ctx.ARRAY_BUFFER, pos_buff);
     ctx.bufferData(ctx.ARRAY_BUFFER, pos_raw, ctx.STATIC_DRAW);
@@ -94,6 +100,8 @@ export function BeforeRender(): void {
     const l = ctx.getAttribLocation(p, "a_position");
     ctx.vertexAttribPointer(l, 3, ctx.FLOAT, false, 0, 0);
     ctx.enableVertexAttribArray(l);
+
+    ctx.useProgram(p);
 }
 
 export function Render(): void {
