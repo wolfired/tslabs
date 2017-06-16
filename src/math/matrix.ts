@@ -1,4 +1,4 @@
-import { AXIS } from "../math";
+import { AXIS } from "./consts";
 
 export function MakeZero(): Matrix {
     return new Matrix();

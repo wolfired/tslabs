@@ -24,7 +24,7 @@ export function simpleFetch(url: string) {
     });
 }
 
-type Callback = (result: Uint8Array) => void;
+export type Callback = (result: Uint8Array) => void;
 
 class Task {
     private _url: string;

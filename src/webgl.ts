@@ -1,7 +1,7 @@
 import { Envs } from "./main";
 import * as matrix from "./math/matrix";
 import * as vector from "./math/vector";
-import * as utils from "./webgl/utils";
+import * as utils from "./math/utils";
 
 const vss = `
     attribute vec3 a_position;

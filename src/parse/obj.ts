@@ -199,7 +199,7 @@ export class Obj implements IParser {
     }
 }
 
-class VertexData {
+export class VertexData {
     public readonly size: int = 0;
     public readonly raw: Float32Array = null!;
 
@@ -213,7 +213,7 @@ class VertexData {
     }
 }
 
-class TriangleData {
+export class TriangleData {
     public readonly size: int = 0;
     public readonly raw: Int32Array = null!;
 
