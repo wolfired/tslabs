@@ -7,10 +7,14 @@ export function Setup(): void {
 
     sock.binaryType = "arraybuffer";
 
-    sock.onmessage = (e:MessageEvent) => {
+    sock.onmessage = (e: MessageEvent) => {
     }
+
+    sock.onopen = (e: Event) => {
+
+    };
 }
 
-export function Send(raw:ArrayBuffer):void{
+export function Send(raw: ArrayBuffer): void {
     sock.send(raw);
 }
