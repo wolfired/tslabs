@@ -2,6 +2,7 @@ import { Envs } from "./main";
 import * as matrix from "./math/matrix";
 import * as vector from "./math/vector";
 import * as utils from "./math/utils";
+import { WGLWrapper, ShaderType } from "./webgl/wrapper";
 
 const vss = `
     attribute vec3 a_position;
@@ -27,37 +28,46 @@ const fss = `
 `;
 
 let ctx: WebGLRenderingContext;
+let wgl: WGLWrapper;
 
 export function Setup(): void {
     Envs.ctx = ctx = Envs.can.getContext("webgl")!;
     ctx.clearColor(0.157, 0.173, 0.204, 1.0);
 
+    wgl = new WGLWrapper(ctx);
+
+    try {
+        wgl.makeShader(ShaderType.VERTEX_SHADER, "vss");
+    } catch (error) {
+        console.log(error);
+    }
+
     ResetViewport();
 }
 
-export function MakeShader(st: uint, s: string): WebGLShader {
-    const shader = ctx.createShader(st);
-    if (null === shader) {
-        throw "error";
-    }
+// export function MakeShader(st: uint, s: string): WebGLShader {
+//     const shader = ctx.createShader(st);
+//     if (null === shader) {
+//         throw "error";
+//     }
 
-    ctx.shaderSource(shader, s);
-    ctx.compileShader(shader);
+//     ctx.shaderSource(shader, s);
+//     ctx.compileShader(shader);
 
-    return shader;
-}
+//     return shader;
+// }
 
-export function MakeProgram(vs: WebGLShader, fs: WebGLShader): WebGLProgram {
-    const program = ctx.createProgram();
-    if (null === program) {
-        throw "error";
-    }
-    ctx.attachShader(program, vs);
-    ctx.attachShader(program, fs);
-    ctx.linkProgram(program);
+// export function MakeProgram(vs: WebGLShader, fs: WebGLShader): WebGLProgram {
+//     const program = ctx.createProgram();
+//     if (null === program) {
+//         throw "error";
+//     }
+//     ctx.attachShader(program, vs);
+//     ctx.attachShader(program, fs);
+//     ctx.linkProgram(program);
 
-    return program;
-}
+//     return program;
+// }
 
 export function ResetViewport(): void {
     ctx.viewport(0, 0, Envs.can.width, Envs.can.height);
@@ -66,9 +76,9 @@ export function ResetViewport(): void {
 let p: WebGLProgram;
 
 export function BeforeRender(): void {
-    const vs = MakeShader(ctx.VERTEX_SHADER, vss);
-    const fs = MakeShader(ctx.FRAGMENT_SHADER, fss);
-    p = MakeProgram(vs, fs);
+    const vs = wgl.makeShader(ShaderType.VERTEX_SHADER, vss);
+    const fs = wgl.makeShader(ShaderType.FRAGMENT_SHADER, fss);
+    p = wgl.makeProgram(vs, fs);
 
     const pos_raw = new Float32Array([
         -0.5, 0.5, 0.0,
@@ -87,10 +97,9 @@ export function BeforeRender(): void {
     ]);
 
     let an = ctx.getProgramParameter(p, ctx.ACTIVE_ATTRIBUTES);
-    for(let i:int = 0; i < an; ++i){
+    for (let i: int = 0; i < an; ++i) {
         let c = ctx.getActiveAttrib(p, i)!;
         console.log(c);
-        
     }
 
     const pos_buff = ctx.createBuffer()!;

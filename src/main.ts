@@ -23,7 +23,7 @@ export const Envs = {
 export function Main(): void {
     html.Setup();
     webgl.Setup();
-    sock.Setup();
+    // sock.Setup();
 
     Envs.entities = [];
 
