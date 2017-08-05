@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Ts实验室",
   "scripts": {
-    "debug": "tsc -p . --outDir ./debug --preserveConstEnums --sourceMap",
+    "debug": "tsc -p . --outDir ./debug --declaration --preserveConstEnums --sourceMap",
     "release": "tsc -p . --outDir ./release --declaration --noEmitOnError --noFallthroughCasesInSwitch --noUnusedLocals --noUnusedParameters --removeComments",
     "clean": "rm -rf debug/",
     "deps": "rm -rf node_modules/ && npm install",
