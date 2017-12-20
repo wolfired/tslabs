@@ -7,7 +7,6 @@
     "release": "tsc -p . --outDir ./release --declaration --noEmitOnError --noFallthroughCasesInSwitch --noUnusedLocals --noUnusedParameters --removeComments",
     "clean": "rm -rf debug/",
     "deps": "rm -rf node_modules/ && npm install",
-    "types": "rm -rf typings/ && typings install",
     "test": "echo no test"
   },
   "repository": {
@@ -21,5 +20,10 @@
   },
   "homepage": "https://github.com/wolfired/tslabs#readme",
   "dependencies": {
+    "@types/ws": "^3.2.1",
+    "ws": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.53"
   }
 }
