@@ -21,6 +21,7 @@
   "homepage": "https://github.com/wolfired/tslabs#readme",
   "dependencies": {
     "@types/ws": "^3.2.1",
+    "mongodb": "^3.0.0-rc0",
     "ws": "^3.3.2"
   },
   "devDependencies": {
